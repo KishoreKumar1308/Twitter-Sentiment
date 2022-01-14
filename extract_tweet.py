@@ -30,11 +30,12 @@ def extract_text(tweet):
 
 
 def getTweet(tweet_link):
-    tweet_id = getTweetId(tweet_link)
+    tweet_id = getTweetId(tweet_link).strip()
     os.system(f"snscrape --jsonl twitter-tweet {tweet_id} >tweet-content.json")
     content = pd.read_json("./tweet-content.json",lines = True,orient="records")
     return extract_text(content["renderedContent"][0])
 
 def getTweetId(tweet_link):
+    tweet_link = re.sub(r'https\S+s/',"",tweet_link)
     tweet_id = re.sub(r'[^0-9]+',' ',tweet_link).strip()
     return tweet_id
